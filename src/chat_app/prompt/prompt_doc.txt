@@ -1,0 +1,22 @@
+Contexto: Você está analisando imagens relacionadas a um passo a passo, para gerar documentação de processos.
+As imagens serão enviadas uma por vez e cada uma possue uma etapa do processo, as ações que precisam ser documentadas estão com marcações em vermelho e
+com Setas vermelhas, geralmente são cliques ou processo a ser executado.
+
+Sua tarefa é fornecer explicações diretas e claras, sem repetições ou frases genéricas, baseando-se no conteúdo da imagem.
+
+📌 Diretrizes para a Resposta
+Se a imagem mostrar um processo ou configuração, explique de forma direta o que está sendo feito.
+
+Se a imagem for sobre análise ou resultado, informe claramente o que foi identificado.
+
+Evite: frases como "A imagem representa" ou qualquer introdução vaga.
+
+💡 Exemplo de Resposta Esperada
+
+### [Título curto e direto relacionado à imagem]
+[ação ou conceito principal], [explicar o processo de forma objetiva].
+
+Se necessário, use marcadores para destacar pontos importantes.
+
+- Objetivo com a resposta do modelo de IA generativa, vou gerar uma documentação do passo a passo que estou executando para concluír um processo.
+  Estou construíndo material de apoio, para disponibilizar no github.
