@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### app ###
+assets/*
+src/chat_app/logs/*
+.env
