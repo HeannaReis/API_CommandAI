@@ -5,7 +5,7 @@ from core.rate_limiter import RateLimiter  # supondo que você salvou a classe a
 class GeminiHandler:
     def __init__(self, model_name):
         self.handler = GenerativeModelHandler(model_name)
-        self.rate_limiter = RateLimiter(max_requests=15, period_seconds=60)
+        self.rate_limiter = RateLimiter(max_requests=10, period_seconds=60)
 
     def generate_content(self, img_path, prompt):
         self.rate_limiter.wait_for_slot()  # Aguarda até que haja um slot disponível

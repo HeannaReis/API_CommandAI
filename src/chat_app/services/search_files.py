@@ -6,34 +6,36 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def ler_todos_arquivos_python_e_java() -> str:
-    """Lê todo o conteúdo de todos os arquivos .py e .java a partir de src/"""
+def ler_arquivos_por_extensao(extensions: list[str]) -> str: # <--- Nova função mais genérica
+    """
+    Lê todo o conteúdo de arquivos com as extensões fornecidas (ex: ['.py', '.java'])
+    a partir do diretório base configurado.
+    """
     src_dir = Config.BASE_DIR
-
     conteudo_total = ""
 
     if not src_dir.exists():
         logging.warning(f"Diretório 'src' não encontrado: {src_dir}")
         return ""
 
-    # Busca arquivos .py e .java separadamente
-    padrao_busca_py = os.path.join(src_dir, '**', '*.py')
-    padrao_busca_java = os.path.join(src_dir, '**', '*.java')
+    # Itera sobre cada extensão fornecida
+    for ext in extensions:
+        # Garante que a extensão comece com um ponto, se ainda não tiver
+        if not ext.startswith('.'):
+            ext = '.' + ext
 
-    arquivos_py = glob.glob(padrao_busca_py, recursive=True)
-    arquivos_java = glob.glob(padrao_busca_java, recursive=True)
+        padrao_busca = os.path.join(src_dir.as_posix(), '**', f'*{ext}') # <--- Padrão dinâmico
+        arquivos = glob.glob(padrao_busca, recursive=True)
 
-    arquivos = arquivos_py + arquivos_java
-    arquivos.sort() # Ordena a lista completa
-
-    for arquivo in arquivos:
-        try:
-            with open(arquivo, 'r', encoding='utf-8') as f:
-                rel_path = os.path.relpath(arquivo, src_dir)
-                conteudo_total += f"\n\n# {rel_path}\n\n{f.read()}"
-                logging.info(f"Arquivo lido com sucesso: {rel_path}")
-        except Exception as e:
-            logging.error(f"Erro ao ler o arquivo {arquivo}: {e}")
-            continue
+        for arquivo in sorted(arquivos):
+            try:
+                with open(arquivo, 'r', encoding='utf-8') as f:
+                    rel_path = os.path.relpath(arquivo, src_dir)
+                    # Adiciona um cabeçalho para indicar o arquivo e seu caminho relativo
+                    conteudo_total += f"\n\n# {rel_path}\n\n{f.read()}"
+                    logging.info(f"Arquivo lido com sucesso: {rel_path}")
+            except Exception as e:
+                logging.error(f"Erro ao ler o arquivo {arquivo}: {e}")
+                continue
 
     return conteudo_total

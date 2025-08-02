@@ -10,7 +10,8 @@ log_filename = datetime.now().strftime("log_%Y%m%d.log")
 log_filepath = os.path.join(LOG_DIR, log_filename)
 
 logging.basicConfig(
-    level=logging.INFO,
+    # ALTERE ESTA LINHA PARA logging.DEBUG PARA VER TODOS OS DETALHES!
+    level=logging.DEBUG, # <--- Mude de logging.INFO para logging.DEBUG
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.FileHandler(log_filepath, encoding='utf-8'),

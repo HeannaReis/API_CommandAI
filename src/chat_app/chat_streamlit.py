@@ -6,11 +6,12 @@ from PIL import Image
 import os
 import io
 from config.config import Config
-from core.rate_limiter import RateLimiter  # Importe a classe RateLimiter
+from core.rate_limiter import RateLimiter
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-from services.search_files import ler_todos_arquivos_python_e_java
+from services.search_files import ler_arquivos_por_extensao
+
 
 # Carrega as variáveis de ambiente
 load_dotenv()
@@ -39,7 +40,7 @@ if "image_prompt" not in st.session_state:
     st.session_state.image_prompt = None
 
 # Limite máximo de mensagens no histórico
-MAX_MESSAGES = 20
+MAX_MESSAGES = 10
 
 # Função para carregar o prompt do chat
 def load_chat_prompt():
@@ -50,13 +51,14 @@ def load_chat_prompt():
         return "Você é um assistente de IA versátil e útil. Você pode conversar sobre diversos assuntos e também analisar imagens quando elas forem fornecidas."
 
 # Adicione o conteúdo dos arquivos Python como contexto
-codigo_fonte = ler_todos_arquivos_python_e_java()
+linguagens_suportadas = ['.java'] # <--- Defina as extensões desejadas aqui
+codigo_fonte = ler_arquivos_por_extensao(linguagens_suportadas) # <--- Chamada da função alterada
 chat_prompt = f"{load_chat_prompt()}\n\nContexto:\n\n{codigo_fonte}"
 
 # Inicializa GeminiHandler
 @st.cache_resource
 def get_gemini_handler():
-    return GeminiHandler("gemini-2.0-flash-exp")
+    return GeminiHandler("gemini-2.5-flash")
 
 gemini_handler = get_gemini_handler()
 
@@ -257,12 +259,12 @@ if st.session_state.processing and hasattr(st.session_state, 'current_prompt'):
 
 # Configuração da barra lateral
 with st.sidebar:
-    st.title("Chat IA Inteligente")
+    st.title("Chat IA Java")
 
     # Seção de geração de imagem
     st.markdown("### Gerar Imagem")
     image_prompt = st.text_input("Digite o prompt para gerar uma imagem:", key="image_prompt")
-    if st.button("Gerar Imagem"):   
+    if st.button("Gerar Imagem"):
         if image_prompt:
             generated_image = generate_image(image_prompt)
 
